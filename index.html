@@ -145,11 +145,11 @@
       });
 
       // 3. 尝试申请浏览器级全屏 (针对支持的桌面端和安卓端)
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      } else if (document.documentElement.webkitRequestFullscreen) { /* iOS Safari 兼容 */
-        document.documentElement.webkitRequestFullscreen();
-      }
+      //if (document.documentElement.requestFullscreen) {
+      //  document.documentElement.requestFullscreen().catch(() => {});
+      //} else if (document.documentElement.webkitRequestFullscreen) { /* iOS Safari 兼容 */
+      //  document.documentElement.webkitRequestFullscreen();
+      //}
 
       // 4. 界面切换：隐藏投票，显示突脸
       votingPanel.classList.add('hidden');
