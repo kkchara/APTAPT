@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>五代女团「唯一神颜」官方评选</title>
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 恶搞突脸时的屏幕剧烈抖动与缩放动画 */
+    @keyframes intense-shake {
+      0% { transform: translate(2px, 2px) scale(1); }
+      10% { transform: translate(-2px, -3px) scale(1.05); }
+      20% { transform: translate(-4px, 0px) scale(0.95); }
+      30% { transform: translate(0px, 3px) scale(1.02); }
+      40% { transform: translate(2px, -2px) scale(1); }
+      50% { transform: translate(-2px, 3px) scale(1.08); }
+      60% { transform: translate(-4px, 1px) scale(0.97); }
+      70% { transform: translate(3px, 2px) scale(1.03); }
+      80% { transform: translate(-2px, -2px) scale(1); }
+      90% { transform: translate(3px, 3px) scale(1.05); }
+      100% { transform: translate(2px, -3px) scale(1); }
+    }
+    .shake {
+      animation: intense-shake 0.05s infinite;
+    }
+    /* 铺满屏幕的女团高清美图背景 */
+    .bg-aesthetic {
+      /* 建议替换为你准备好的女团合照、精美舞台照作为封面 */
+      background-image: url('https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+<body class="bg-aesthetic min-h-screen text-white relative flex items-center justify-center overflow-hidden">
+
+  <!-- 背景暗色半透明遮罩与毛玻璃 -->
+  <div class="absolute inset-0 bg-black/55 backdrop-blur-[2px] -z-10"></div>
+
+  <!-- 预加载全损鬼叫音频 -->
+  <audio id="scream-audio" src="apt.mp3" preload="auto"></audio>
+
+  <!-- ================= 阶段 1：伪装投票界面 ================= -->
+  <main id="voting-panel" class="w-full max-w-md mx-4 transition-all duration-500">
+    <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl text-center">
+      
+      <span class="inline-block px-3 py-1 bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded-full text-xs font-semibold mb-4 tracking-wider uppercase">
+        Official Live Vote
+      </span>
+
+      <h1 class="text-2xl md:text-3xl font-black mb-2 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+        五代女团「第一神颜」
+      </h1>
+      <p class="text-gray-300 text-xs md:text-sm mb-6">投票一经提交无法修改，数据实时计入官方总决赛。</p>
+
+      <!-- 选项按钮组：分别传递不同的明星标识符 -->
+      <div class="space-y-4">
+        
+        <!-- 传递 'wonyoung' -->
+        <button onclick="triggerPrank('wonyoung')" class="w-full py-4 bg-white/5 active:bg-white/20 hover:bg-white/10 active:scale-[0.98] transition-all border border-white/10 rounded-2xl flex items-center justify-between px-5">
+          <div class="flex items-center space-x-3">
+            <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+            <span class="text-base font-bold text-white">张元英 (IVE)</span>
+          </div>
+          <span class="text-xs text-pink-300 font-mono font-bold">34.2%</span>
+        </button>
+
+        <!-- 传递 'karina' -->
+        <button onclick="triggerPrank('karina')" class="w-full py-4 bg-white/5 active:bg-white/20 hover:bg-white/10 active:scale-[0.98] transition-all border border-white/10 rounded-2xl flex items-center justify-between px-5">
+          <div class="flex items-center space-x-3">
+            <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+            <span class="text-base font-bold text-white">柳智敏 (aespa)</span>
+          </div>
+          <span class="text-xs text-purple-300 font-mono font-bold">31.8%</span>
+        </button>
+
+        <!-- 传递 'rose' -->
+        <button onclick="triggerPrank('rose')" class="w-full py-4 bg-white/5 active:bg-white/20 hover:bg-white/10 active:scale-[0.98] transition-all border border-white/10 rounded-2xl flex items-center justify-between px-5">
+          <div class="flex items-center space-x-3">
+            <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+            <span class="text-base font-bold text-white">朴彩英 (BLACKPINK)</span>
+          </div>
+          <span class="text-xs text-rose-300 font-mono font-bold">29.5%</span>
+        </button>
+
+      </div>
+
+      <div class="mt-6 text-[10px] text-gray-400">
+        * 每个 IP 地址仅限投一票。技术支持：Web3 Global Anti-Bot System
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= 阶段 2：专属突脸界面 ================= -->
+  <div id="scare-panel" class="hidden fixed inset-0 w-screen h-screen bg-black z-50 flex items-center justify-center">
+    <img id="scare-image" src="" class="w-full h-full object-cover shake" alt="Scare">
+  </div>
+
+  <script>
+    // ==========================================
+    // 配置每个明星专属的黑图列表 (请替换为你的真实图片路径)
+    // ==========================================
+    const celebrityPranks = {
+      // 张元英的专属黑图列表
+      wonyoung: [
+        'img/z1.jpg',
+        'img/z2.jpg',
+      ],
+      // 柳智敏的专属黑图列表
+      karina: [
+        'img/l1.jpg',
+        'img/l2.jpg',
+      ],
+      // 朴彩英的专属黑图列表
+      rose: [
+        'img/p1.jpg',
+        'img/p2.jpg',
+      ]
+    };
+
+    let slideshowInterval = null;
+
+    function triggerPrank(starKey) {
+      const audio = document.getElementById('scream-audio');
+      const votingPanel = document.getElementById('voting-panel');
+      const scarePanel = document.getElementById('scare-panel');
+      const scareImage = document.getElementById('scare-image');
+
+      // 1. 获取当前点击明星对应的专属黑图数组
+      const photos = celebrityPranks[starKey];
+      
+      // 安全保护：若对应的图片列表不存在或为空，则不继续执行
+      if (!photos || photos.length === 0) {
+        console.error(`未找到 ${starKey} 的黑图配置！`);
+        return;
+      }
+
+      // 2. 将网页媒体音量调整至最大
+      audio.volume = 1.0;
+      audio.loop = true;
+      audio.play().catch(err => {
+        console.log("音频播放受阻:", err);
+      });
+
+      // 3. 尝试申请浏览器级全屏 (针对支持的桌面端和安卓端)
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (document.documentElement.webkitRequestFullscreen) { /* iOS Safari 兼容 */
+        document.documentElement.webkitRequestFullscreen();
+      }
+
+      // 4. 界面切换：隐藏投票，显示突脸
+      votingPanel.classList.add('hidden');
+      scarePanel.classList.remove('hidden');
+
+      // 5. 立即展示该明星的第一张黑图
+      let photoIndex = 0;
+      scareImage.src = photos[photoIndex];
+
+      // 6. 开启定时器，以 70ms 的高频仅在该明星的专属黑图列表中循环闪烁
+      slideshowInterval = setInterval(() => {
+        photoIndex = (photoIndex + 1) % photos.length;
+        scareImage.src = photos[photoIndex];
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
